@@ -64,7 +64,6 @@ public class BookController {
 		}
 		else {
 			Optional<Book> opt = bookService.getBook(bookId);
-			System.out.println("Received: "+bookId);
 			if(opt.isPresent()) {
 				bookService.updateBook(bookId, selectedBook.getIsbn13(), selectedBook.getTitle(), selectedBook.getAuthor());
 				//return "redirect:/books/"+selectedBook.getIsbn13();
@@ -92,11 +91,14 @@ public class BookController {
 	 */
 	@GetMapping("/books/{bookId}/edit")
 	public String editBook(@PathVariable String bookId, Model model) {
-		System.out.println("Received isbn: "+bookId);
-		Book book = bookService.getBook(bookId).get();
-		model.addAttribute("selectedBook", book);
-		model.addAttribute("comment", new Comment());
-		return "editBookPage";
+		
+		if(bookService.getBook(bookId).isPresent()) {
+			Book book = bookService.getBook(bookId).get();
+			model.addAttribute("selectedBook", book);
+			model.addAttribute("comment", new Comment());
+			return "editBookPage";
+		}
+		return "redirect:/home";
 	}
 	
 	/**
@@ -107,7 +109,7 @@ public class BookController {
 	 */
 	@GetMapping("/books/{bookId}/delete")
 	public String deleteBook(@PathVariable String bookId, Model model) {
-		System.out.println("Received isbn: "+bookId);
+		
 		bookService.deleteBook(bookId);
 		return "redirect:/home";
 	}
@@ -136,7 +138,6 @@ public class BookController {
 	 */
 	@GetMapping("/home")
 	public String getAllBooks(Model model) {
-		//System.out.println(bookService.getAllBooks());
 		List<Book> books = bookService.getAllBooks();
 		model.addAttribute("books", books);
 		return "mainPage";
