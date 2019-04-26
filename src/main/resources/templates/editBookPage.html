@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <title>Add Book</title>
+
+    <style>
+        div.editBook {
+            position: relative;
+            margin: 20px;
+            width: 300px;
+            height: 500px;
+        }
+        div.editBook input[type="text"] {
+            width: 100%;
+        }
+        div.editBook label {
+            width: 25%;
+        }
+        div.editBook input.button {
+           float: right;
+           padding-left: 20px;
+           padding-right: 20px;
+        }
+        div.commentBook {
+            margin: 20px;
+            float: right;
+            position: absolute;
+            top: 0px;
+            right: 300px;
+            width: 400px;
+            height: 400px;
+        }
+        div.commentBook textarea.content {
+            width: 100%;
+        }
+        div.commentBook input.button {
+            float: right;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="editBook">
+    <h1>Edit Book</h1>
+    <form action="#" th:action="@{/books/{id}(id=${selectedBook.isbn13})}" th:object="${selectedBook}" method="post">
+        <p> Title <input type="text" th:value="*{title}" th:field="*{title}"> </p>
+        <label th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</label>
+        <p> Author <input type="text" th:value="*{author}" th:field="*{author}"> </p>
+        <label th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Author Error</label>
+        <p> ISBN <input type="text" th:value="*{isbn13}" th:field="*{isbn13}"> </p>
+        <label th:if="${#fields.hasErrors('isbn13')}" th:errors="*{isbn13}">ISBN13 Error</label>
+        <p> <input type="submit" class="button" value="Update"> </p>
+    </form>
+    </div>
+    <div class="commentBook">
+        <h1>Comments</h1>
+        <p> 
+            <form id="addComment" th:action="@{'/books/'+${selectedBook.isbn13}+'/comment'}" th:object="${comment}" method="post">
+                <p> Comment <textarea form="addComment" class="content" th:field="*{content}" rows="5">Enter text here...</textarea> </p>
+                <input type="submit" class="button" value="Add Comment">
+            </form>
+        </p>
+        <p>
+            <ul class="list-group list-group-flush" th:each="comment : ${selectedBook.comments}">
+                <li class="list-group-item">
+                    <p>Date        <span th:text="${comment.creationTime}"> # </span></p>
+                    <p>Comment        <span th:text="${comment.content}"> Title </span></p>
+                </li>
+            </ul>
+        </p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</body>
+</html>

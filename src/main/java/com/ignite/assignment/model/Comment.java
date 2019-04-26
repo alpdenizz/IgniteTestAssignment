@@ -72,5 +72,16 @@ public class Comment{
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		if(obj == null) return false;
+		if(obj instanceof Comment) {
+			Comment c2 = (Comment)obj;
+			return c2.getId().equals(this.getId());
+		}
+		return false;
+	}
 
 }
