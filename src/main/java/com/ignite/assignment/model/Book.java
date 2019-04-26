@@ -1,21 +1,16 @@
 package com.ignite.assignment.model;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 /**
  * 
@@ -72,6 +67,11 @@ public class Book {
 		return author;
 	}
 	
+	/**
+	 * 
+	 * @return Comment list ordered by creation time of comments
+	 * <p>Last entered comment will be first element in the list</p>
+	 */
 	public List<Comment> getComments() {
 		return comments.stream().sorted((c1,c2) -> {
 			return c2.getCT().compareTo(c1.getCT());
@@ -115,6 +115,9 @@ public class Book {
 		this.numberOfComments = comments.size();
 	}
 	
+	/**
+	 * Two books are equal iff their isbn field is equal
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub

@@ -13,15 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.ignite.assignment.model.Book;
 import com.ignite.assignment.model.Comment;
 import com.ignite.assignment.service.BookService;
+
+/**
+ * 
+ * @author Denizalp KAPISIZ (denizalp1634@gmail.com)
+ * <p>Book controller to operate Book management system among views</p>
+ */
 
 @Controller
 public class BookController {
@@ -29,8 +30,15 @@ public class BookController {
 	@Autowired
 	private BookService bookService;
 	
+	/**
+	 * 
+	 * @param book built by entered input from form in createBookPage.html
+	 * @param bindingResult to obtain validation result from form
+	 * @return home page if operation is successful<br>
+	 * Otherwise form page will be open with errors
+	 */
 	@PostMapping("/books")
-	public String addBook(@Valid @ModelAttribute @RequestBody Book book, BindingResult bindingResult) {
+	public String addBook(@Valid @ModelAttribute Book book, BindingResult bindingResult) {
 		if(bindingResult.hasErrors()) {
 			return "createBookPage";
 		}
@@ -40,6 +48,15 @@ public class BookController {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param bookId isbn of Book to be updated
+	 * @param selectedBook selected book in home page
+	 * @param bindingResult validation results of new values in editing
+	 * @param model
+	 * @return If no validation error then Updates the book and returns to home page<br>
+	 * If validation error then still returns to home page but without change in selected book
+	 */
 	@PostMapping("/books/{bookId}")
 	public String updateBook(@PathVariable String bookId, @Valid @ModelAttribute Book selectedBook, BindingResult bindingResult, Model model) {
 		if(bindingResult.hasErrors()) {
@@ -49,7 +66,6 @@ public class BookController {
 			Optional<Book> opt = bookService.getBook(bookId);
 			System.out.println("Received: "+bookId);
 			if(opt.isPresent()) {
-				Book b = opt.get();
 				bookService.updateBook(bookId, selectedBook.getIsbn13(), selectedBook.getTitle(), selectedBook.getAuthor());
 				//return "redirect:/books/"+selectedBook.getIsbn13();
 			}
@@ -57,12 +73,23 @@ public class BookController {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param model holds object to fill with form values
+	 * @return opens form page for book creation
+	 */
 	@GetMapping("/books/new")
 	public String newBook(Model model) {
 		model.addAttribute("book", new Book());
 		return "createBookPage";
 	}
 	
+	/**
+	 * 
+	 * @param bookId Book's isbn
+	 * @param model holds objects for operation in editPage
+	 * @return Edit page of selected book
+	 */
 	@GetMapping("/books/{bookId}/edit")
 	public String editBook(@PathVariable String bookId, Model model) {
 		System.out.println("Received isbn: "+bookId);
@@ -72,6 +99,12 @@ public class BookController {
 		return "editBookPage";
 	}
 	
+	/**
+	 * 
+	 * @param bookId Book isbn to delete
+	 * @param model
+	 * @return Deletes the selected book and refreshes home page
+	 */
 	@GetMapping("/books/{bookId}/delete")
 	public String deleteBook(@PathVariable String bookId, Model model) {
 		System.out.println("Received isbn: "+bookId);
@@ -79,6 +112,14 @@ public class BookController {
 		return "redirect:/home";
 	}
 	
+	/**
+	 * 
+	 * @param bookId Book isbn to insert comment in it
+	 * @param comment Comment object for operation
+	 * @param bindingResult validation results from content textarea
+	 * @return Inserts comment with NotEmpty comment into book and returns home page<br>
+	 * If with empty comment, still returns home page but without adding comment into book
+	 */
 	@PostMapping("books/{bookId}/comment")
 	public String addComment(@PathVariable String bookId, @Valid @ModelAttribute Comment comment, BindingResult bindingResult){
 		if(bindingResult.hasErrors()) {
@@ -88,42 +129,17 @@ public class BookController {
 		return "redirect:/home";
 	}
 	
+	/**
+	 * 
+	 * @param model holds all books from Book table
+	 * @return All existing books in the system
+	 */
 	@GetMapping("/home")
 	public String getAllBooks(Model model) {
 		//System.out.println(bookService.getAllBooks());
 		List<Book> books = bookService.getAllBooks();
 		model.addAttribute("books", books);
 		return "mainPage";
-	}
-	
-	@GetMapping("/api/books")
-	public String getBook(@RequestParam String isbn, Model model) {
-		Optional<Book> book = bookService.getBook(isbn);
-		if(book.isPresent()) {
-			Book present = book.get();
-			model.addAttribute("isbn", present.getIsbn13());
-			model.addAttribute("title", present.getTitle());
-			model.addAttribute("author", present.getAuthor());
-			model.addAttribute("comments", present.getComments());
-			return "/books/"+isbn;
-		}
-		return "/";
-	}
-	
-	@PutMapping("/api/books")
-	public String updateBook(@RequestParam String isbn, Model model) {
-		Optional<Book> book = bookService.getBook(isbn);
-		if(book.isPresent()) {
-			Object o1 = model.getAttribute("isbn");
-			Object o2 = model.getAttribute("title");
-			Object o3 = model.getAttribute("author");
-			String s1 = o1 != null ? o1.toString() : "";
-			String s2 = o2 != null ? o2.toString() : "";
-			String s3 = o3 != null ? o3.toString() : "";
-			bookService.updateBook(isbn, s1, s2, s3);
-			return "/books/"+isbn;
-		}
-		return "/";
 	}
 	
 

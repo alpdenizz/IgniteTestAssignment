@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -73,6 +72,9 @@ public class Comment{
 		this.id = id;
 	}
 	
+	/**
+	 * Two comments are equal iff their ids are equal
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
