@@ -1,9 +1,12 @@
-package com.ignite.assignment.controller;
+package com.ignite.assignment.service;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,6 +25,7 @@ import com.ignite.assignment.service.BookService;
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@TestPropertySource("classpath:/application-test.properties")
 public class BookServiceTest {
 	
 	@Autowired
@@ -34,9 +38,14 @@ public class BookServiceTest {
 	 * Assert autowired beans are not null
 	 */
 	@Test
-	public void test_BeansNotNull() {
+	public void test_BeansNotNullAndLiquibaseWorking() {
 		assertNotNull(bookRepository);
 		assertNotNull(bookService);
+		
+		List<Book> books = bookService.getAllBooks();
+		assertThat(books).hasSize(2);
+		assertThat(books.get(0).getIsbn13()).isEqualTo("isbn999");
+		assertThat(books.get(1).getIsbn13()).isEqualTo("isbn998");
 	}
 	
 	/**
