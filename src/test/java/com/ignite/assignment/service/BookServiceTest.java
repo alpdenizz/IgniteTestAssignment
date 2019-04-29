@@ -65,12 +65,15 @@ public class BookServiceTest {
 	@Test
 	public void test_addBookSuccessful() {
 		int before = bookService.getAllBooks().size();
-		Book b = new Book("isbn4","title4","author4");
+		Book b = new Book(" isbn4"," title 4"," author 4");
 		bookService.addBook(b);
 		
 		int after = bookService.getAllBooks().size();
 		assertThat(after-before).isEqualTo(1);
 		assertThat(bookService.getBook("isbn4")).isPresent();
+		Book b1 = bookService.getBook("isbn4").get();
+		assertThat(b1.getAuthor()).isEqualTo("author 4");
+		assertThat(b1.getTitle()).isEqualTo("title 4");
 	}
 	
 	/**

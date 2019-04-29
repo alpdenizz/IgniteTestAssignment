@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -26,7 +27,7 @@ public class Comment{
 	/**
 	 * Content of the comment
 	 */
-	@NotEmpty
+	@NotBlank
 	private String content;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
@@ -39,7 +40,7 @@ public class Comment{
 	private LocalDateTime creationTime = LocalDateTime.now();
 	
 	public Comment(String content,Book book) {
-		this.content = content;
+		this.content = content.trim();
 		this.id = book.getIsbn13()+"_"+creationTime.toString();
 		this.book = book;
 	}
@@ -84,6 +85,11 @@ public class Comment{
 			return c2.getId().equals(this.getId());
 		}
 		return false;
+	}
+	
+	public Comment trimFields() {
+		this.content = this.content.trim();
+		return this;
 	}
 
 }
