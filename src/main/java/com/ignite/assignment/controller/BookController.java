@@ -35,7 +35,9 @@ public class BookController {
 	 * @param book built by entered input from form in createBookPage.html
 	 * @param bindingResult to obtain validation result from form
 	 * @return home page if operation is successful<br>
-	 * Otherwise form page will be open with errors
+	 * Otherwise form page will be open with errors<br>
+	 * Also home page if there is a book in the table with entered isbn
+	 * in that case nothing happens
 	 */
 	@PostMapping("/books")
 	public String addBook(@Valid @ModelAttribute Book book, BindingResult bindingResult) {
@@ -43,8 +45,13 @@ public class BookController {
 			return "createBookPage";
 		}
 		else {
-			bookService.addBook(book);
-			return "redirect:/home";
+			if(bookService.getBook(book.getIsbn13()).isPresent()) {
+				return "redirect:/home";
+			}
+			else {
+				bookService.addBook(book);
+				return "redirect:/home";
+			}
 		}
 	}
 	
@@ -139,6 +146,7 @@ public class BookController {
 	@GetMapping("/home")
 	public String getAllBooks(Model model) {
 		List<Book> books = bookService.getAllBooks();
+		books.forEach(b -> b.setNumberOfComments());
 		model.addAttribute("books", books);
 		return "mainPage";
 	}

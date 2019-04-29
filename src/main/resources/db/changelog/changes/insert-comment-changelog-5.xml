@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<property name="now" value="CURRENT_TIMESTAMP" dbms="h2"/>
+	<changeSet author="denizalp1634@gmail.com" id="7">
+		<loadData file="/db/changelog/changes/data/comment.csv" tableName="book_comment" separator=";">
+		<column name="id" type="string"/>
+		<column name="content" type="string"/>
+		<column name="creation_time" type="timestamp"/>
+		<column name="isbn13" type="string"/>
+    </loadData>
+	</changeSet>
+	
+</databaseChangeLog>
