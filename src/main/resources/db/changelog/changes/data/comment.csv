@@ -1,0 +1,4 @@
+id;content;creation_time;isbn13
+1;good book;2019-04-29T11:11:00;isbn1
+2;bad book;2019-04-29T11:12:00;isbn1
+3;ok;2019-04-29T11:00:00;isbn2

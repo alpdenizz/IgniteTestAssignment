@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -26,19 +27,19 @@ public class Book {
 	 * ISBN-13 field for identification of books
 	 */
 	@Id
-	@NotEmpty
+	@NotBlank
 	private String isbn13;
 	
 	/**
 	 * Title of book
 	 */
-	@NotEmpty
+	@NotBlank
 	private String title;
 	
 	/**
 	 * Author of book
 	 */
-	@NotEmpty
+	@NotBlank
 	private String author;
 	
 	/**
@@ -56,9 +57,9 @@ public class Book {
 	 * @param author
 	 */
 	public Book(@Valid String isbn13, @Valid String title, @Valid String author) {
-		this.isbn13 = isbn13;
-		this.title = title;
-		this.author = author;
+		this.isbn13 = isbn13.trim();
+		this.title = title.trim();
+		this.author = author.trim();
 	}
 	
 	public Book() {}
@@ -127,6 +128,13 @@ public class Book {
 			return b2.getIsbn13().equals(this.isbn13);
 		}
 		return false;
+	}
+	
+	public Book trimFields() {
+		this.isbn13 = this.isbn13.trim();
+		this.author = this.author.trim();
+		this.title = this.title.trim();
+		return this;
 	}
 	
 }
