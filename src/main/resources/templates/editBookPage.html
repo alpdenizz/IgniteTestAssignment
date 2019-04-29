@@ -70,8 +70,8 @@
         <p>
             <ul class="list-group list-group-flush" th:each="comment : ${selectedBook.comments}">
                 <li class="list-group-item">
-                    <p>Date        <span th:text="${comment.creationTime}"> # </span></p>
-                    <p>Comment        <span th:text="${comment.content}"> Title </span></p>
+                    <p><span th:text="${comment.creationTime}"></span></p>
+                    <p><span th:text="${comment.content}"></span></p>
                 </li>
             </ul>
         </p>
