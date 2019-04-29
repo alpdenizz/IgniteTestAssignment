@@ -143,6 +143,25 @@ public class BookServiceTest {
 	}
 	
 	/**
+	 * Assert insertion is not successful because isbn existed in the table
+	 * <ul>
+	 * <li>There must be no change in Book table</li>
+	 * </ul>
+	 */
+	@Test
+	public void test_addBookNotSuccessful_IsbnExistedInTable() {
+		int before = bookService.getAllBooks().size();
+		Book b = new Book("isbn1","title4","author4");
+		bookService.addBook(b);
+		
+		int after = bookService.getAllBooks().size();
+		assertThat(after-before).isEqualTo(0);
+		Book preserved = bookService.getBook("isbn1").get();
+		assertThat(preserved.getAuthor()).isEqualTo("author1");
+		assertThat(preserved.getTitle()).isEqualTo("title1");
+	}
+	
+	/**
 	 * Assert deletion is successful
 	 * <ul>
 	 * <li>Deleted book must not exist in Book table</li>

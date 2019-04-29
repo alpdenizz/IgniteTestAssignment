@@ -45,13 +45,8 @@ public class BookController {
 			return "createBookPage";
 		}
 		else {
-			if(bookService.getBook(book.getIsbn13()).isPresent()) {
-				return "redirect:/home";
-			}
-			else {
-				bookService.addBook(book);
-				return "redirect:/home";
-			}
+			bookService.addBook(book);
+			return "redirect:/home";
 		}
 	}
 	

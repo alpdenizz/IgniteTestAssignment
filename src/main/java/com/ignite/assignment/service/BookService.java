@@ -26,6 +26,7 @@ public class BookService {
 	 * @param book Insert this into Book table
 	 */
 	public void addBook(Book book) {
+		if(!bookRepository.findById(book.getIsbn13()).isPresent())
 		bookRepository.save(book);
 	}
 	
